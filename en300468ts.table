@@ -1,0 +1,66 @@
+ENDEF_BEGIN(nit,0x10,0x40..0x41)
+  ENDEF_NUMBER1(network_id)
+  ENDEF_DESCR
+  ENDEF_LOOP
+    ENDEF_NUMBER0(transport_stream_id)
+    ENDEF_NUMBER1(original_network_id)
+    ENDEF_DESCR
+  ENDEF_LOOPEND0
+ENDEF_END
+ENDEF_BEGIN(sdt,0x11,0x42;0x46)
+  ENDEF_NUMBER0(transport_stream_id)
+  ENDEF_NUMBER1(original_network_id)
+  ENDEF_LOOP
+    ENDEF_NUMBER0(service_id)
+    ENDEF_NUMBER0(eit_schedule_flag)
+    ENDEF_NUMBER0(eit_present_following_flag)
+    ENDEF_NUMBER1(running_status)
+    ENDEF_DESCR
+  ENDEF_LOOPEND0
+ENDEF_END
+ENDEF_BEGIN(bat,0x11,0x4a)
+  ENDEF_NUMBER1(bouquet_id)
+  ENDEF_DESCR
+  ENDEF_LOOP
+    ENDEF_NUMBER0(transport_stream_id)
+    ENDEF_NUMBER1(original_network_id)
+    ENDEF_DESCR
+  ENDEF_LOOPEND0
+ENDEF_END
+ENDEF_BEGIN(eit,0x12,0x4e..0x6f)
+  ENDEF_NUMBER0(service_id)
+  ENDEF_NUMBER0(transport_stream_id)
+  ENDEF_NUMBER1(original_network_id)
+  ENDEF_LOOP
+    ENDEF_NUMBER1(event_id)
+    ENDEF_DATETIME
+    ENDEF_NUMBER0(duration)
+    ENDEF_NUMBER1(running_status)
+    ENDEF_DESCR
+  ENDEF_LOOPEND0
+ENDEF_END
+ENDEF_BEGIN(rst,0x13,0x71)
+  ENDEF_LOOP
+    ENDEF_NUMBER0(transport_stream_id)
+    ENDEF_NUMBER0(original_network_id)
+    ENDEF_NUMBER0(service_id)
+    ENDEF_NUMBER0(event_id)
+    ENDEF_NUMBER1(running_status)
+  ENDEF_LOOPEND0
+ENDEF_END
+ENDEF_BEGIN(tdt,0x14,0x70)
+ENDEF_END
+ENDEF_BEGIN(tot,0x14,0x73)
+  ENDEF_DESCR
+ENDEF_END
+ENDEF_BEGIN(sit,0x1f,0x7f)
+  ENDEF_DESCR
+  ENDEF_LOOP
+    ENDEF_NUMBER0(service_id)
+    ENDEF_NUMBER1(running_status)
+    ENDEF_DESCR
+  ENDEF_LOOPEND0
+ENDEF_END
+ENDEF_BEGIN(dit,0x1e,0x7e)
+  ENDEF_NUMBER1(transition_flag)
+ENDEF_END

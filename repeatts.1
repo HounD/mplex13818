@@ -1,0 +1,63 @@
+.\" Man page for repeatts
+.\"
+.\" Copyright (C) GPL 2001, Convergence Integrated Media GmbH
+.\" Copyright (C) GPL 2003..2005, Oskar Schirmer
+.\"
+.TH repeatts 1 "2010-10-10" "1.1.7" "Multiplexer"
+.SH NAME
+repeatts \- repeater for ISO 13818 transport streams
+.SH SYNOPSIS
+repeatts [\fB-i\fR] [\fB-d delay\fR] [\fB-t time\fR] [\fIfilename\fR]
+.SH DESCRIPTION
+Take a regular file containing an ISO 13818-1 conforming transport stream
+and send it periodically to \fIstdout\fR.
+When a \fIfilename\fR is given, \fBdelay\fR or \fBtime\fR must
+be given, too.
+When no \fIfilename\fR is given, \fB-i\fR is obligatory.
+The transport stream data from \fIfilename\fR is sent to \fIstdout\fR
+within \fBtime\fR msec, evenly distributed, split up into
+transport stream packets of 188 bytes each.
+.P
+The following options are accepted:
+.TP
+\fB\-h\fR, \fB\-\-help\fR
+Display this help.
+.TP
+\fB\-V\fR, \fB\-\-version\fR
+Output version information.
+.TP
+\fB\-i\fR
+During operation, accept commands from stdin, in form of a tupel:
+\fBdelay\fR, \fBtime\fR, \fIfilename\fR. Here, \fBdelay\fR may be
+set to 0 to suppress repeatition, to -1 to quit the program.
+When feeding another \fBdelay time filename\fR tuple to \fIstdin\fR,
+the file currently processed will be replaced by the next file, as
+soon as the current file is completely processed.
+.TP
+\fB\-d delay\fR
+The requested operation shall be repeated every \fBdelay\fR msec.
+When omitted, the data is sent only once.
+.TP
+\fB\-t time\fR
+The transport stream data shall be sent evenly distributed within
+\fBtime\fR msec.
+The default value for \fBtime\fR is \fBdelay\fR.
+\fBtime\fR must not be greater than \fBdelay\fR.
+.SH EXAMPLE
+To send file \fIexample.TS\fR every 5 seconds,
+with the whole file sent within 2 seconds (and thus
+thereafter 3 seconds of inactivity):
+.IP
+$ repeatts -d 5000 -t 2000 example.TS > some.pipe
+.PP
+.SH DETAILS
+Whenever a tuple is given via \fIstdin\fR, this overrides any
+tuple given to \fIstdin\fR earlier, that is not yet worked on, i.e. only
+one tuple is memorized at a time.
+.SH BUGS
+to be detected.
+.SH "SEE ALSO"
+.BR ISO\ 13818-1 ,
+.BR iso13818ts (1).
+.SH AUTHOR
+Oskar Schirmer (schirmer@scara.com).

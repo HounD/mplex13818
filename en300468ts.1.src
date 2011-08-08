@@ -1,0 +1,147 @@
+.\" Man page for en300468ts
+.\"
+.\" Copyright (C) GPL 2004..2008, Oskar Schirmer
+.\"
+.TH en300468ts 1 "2010-10-10" "1.1.7" "Multiplexer"
+.SH NAME
+en300468ts \- SI table generator (EN 300468) for transport streams
+.SH SYNOPSIS
+en300468ts [CONFIGURATION...]
+.SH DESCRIPTION
+Generates SI tables according to EN 300468 from a set of given tables.
+The result is sent to \fIstdout\fR.
+All arguments are treated as filenames,
+which are supposed to denote configuration files.
+The special filename \fI-\fR stands for \fIstdin\fR.
+Each of these files is read line by line, each line refers
+to one table and must have one of the following two forms:
+.TP
+.BI S\  pid\ tableid\ frequency\ file
+The \fIfile\fR is opened and read, it shall contain the table
+contents in simple ascii.
+This table shall be reproduced every \fIfrequency\fR msecs,
+the tableid is \fItableid\fR, the pid is \fIpid\fR.
+If a table with this \fItableid\fR and \fIpid\fR and,
+if applicable, the same \fItableid_extension\fR,
+existed before,
+it is purged first.
+If \fIfrequency\fR is \fB0\fR,
+the table is output only once and not repeated
+.TP
+.BI -\  pid\ tableid
+All corresponding tables will be deleted from the list
+of tables to generate
+.P
+While the primary configuration files are line oriented,
+the table description files are not. They are composed of
+a sequence of tokens, which directly depends on the type
+of the table. See the sections \fBTOKENS\fR and \fBTABLES\fR
+for details.
+.SH EXAMPLE
+The output of \fIen300468ts\fR shall be piped to
+\fIiso13818ts\fR:
+.IP
+$ mkfifo table_pipe
+.br
+$ en300468ts en.conf > table-pipe &
+.br
+$ iso13818ts -B --ts table-pipe --si = 0x10 0x1F > /dev/xvdb1
+.br
+\&...
+.PP
+The example refers to the configuration file \fBen.conf\fR:
+.IP
+S 0x10 0x40 1000 /tmp/nit
+.br
+S 0x13 0x71 1500 /tmp/rst
+.PP
+This in turn refers to two table description files (the
+examples do not show useful values),
+one is \fBnit\fR:
+.IP
+4711
+.br
+1
+.br
+  0x40 "Glotz-NET"
+.br
+1
+.br
+  0x0815
+.br
+  4710
+.br
+  0
+.PP
+The other table description file is \fBrst\fR:
+.IP
+2
+.br
+  2342 991 1 42 1
+.br
+  4711 992 3 56 1
+.PP
+The example will produce a \fBnit\fR table once a second
+and an \fBrst\fR table once in one and a half second.
+.SH TOKENS
+The table descriptor files are made up of the following tokens:
+.TP
+.B number
+Whereever numerical values are needed, these are given as numbers,
+decimal or hexadecimal or octal according to the preference of the
+user.
+.TP
+\fB"string"\fR
+Whereever character strings are needed, these are given in
+double quotes, with double quotes escaped by double quotes, so:
+\fI"this "" is my quote"\fR.
+.TP
+.B DESCRIPTORS
+When a list of descriptors is expected, first the number of
+descriptors to follow is to be given (not the number of bytes!).
+Then the descriptors follow one by one, see section \fIDESCRIPTORS\fR
+for details.
+.TP
+.BR LOOP( ... )
+Parts of a table may be repeated. The number of repeatitions
+is given first, then the contents of the loop is given as often
+as it was denoted first.
+.TP
+.B YYYY/MM/DD HH:MM:SS
+When date and time information is needed, this is given
+in exactly the following form: \fIYYYY/MM/DD\~HH:MM:SS\fR,
+19 characters, the slashes, colons and one blank exactly as given here,
+e.g.: \fI2006/01/31\~20:54:56\fR.
+.SH TABLES
+The syntax of the single table types is given next, with
+valid pid and tableid given in parantheses:
+.TP
+.\" INCLUDE-TABLE
+.BR
+.P
+Note, that the \fBTDT\fR table is empty and thus may
+be represented by the empty file \fB/dev/null\fR.
+.SH DESCRIPTORS
+Descriptors are made up of tokens like tables are, where an
+additional descriptor tag is preceeding.
+.TP
+.\" INCLUDE-DESCR
+.BR
+.P
+.SH NOTES
+Someone said, the option \fI--nit\fR might be useful at \fBiso13818ts\fR,
+when it is about DVB-T.
+.SH "SEE ALSO"
+.BR iso13818ts (1),
+.BR ISO\ 13818-1 ,
+.BR ETSI\ EN\ 300\ 468 ,
+.BR ISO\ 639-2 ,
+.BR ISO\ 3166 .
+.SH AUTHOR
+Oskar Schirmer (schirmer@scara.com).
+.br
+Thanks a lot for specific bug fixes and testing to:
+Michal Benes,
+Jaroslav Pech,
+Alexander Sergin,
+Michael Chernyakhovsky.

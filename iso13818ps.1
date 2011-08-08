@@ -1,0 +1,453 @@
+.\" Man page for iso13818ps
+.\"
+.\" Copyright (C) GPL 2001, Convergence Integrated Media GmbH
+.\" Copyright (C) GPL 2004..2005, Oskar Schirmer
+.\"
+.TH iso13818ps 1 "2010-10-10" "1.1.7" "Multiplexer"
+.SH NAME
+iso13818ps \- multiplexer for ISO 13818 program streams
+.SH SYNOPSIS
+iso13818ps [COMMAND...]
+.SH DESCRIPTION
+Generates an ISO 13818-1 conforming program stream from multiple
+input streams.
+The result is sent to \fIstdout\fR,
+the input streams are read from explicitely opened files.
+All of the following commands may also be fed to \fIstdin\fR during
+operation by omitting the leading hyphen (e.g. \fBQ\fR) or
+double-hyphen (e.g. \fBquit\fR).
+.TP
+\fB\-\-help\fR
+Display this help.
+.TP
+\fB\-V\fR, \fB\-\-version\fR
+Output version information.
+.TP
+\fB\-Q\fR, \fB\-\-quit\fR
+Quit this program.
+.TP
+\fB\-v\fR, \fB\-\-verbose\fR [\fIlevel\fR]
+Verbose mode, \fIlevel\fR = 0..6, default is 2 (providing warnings
+concerning data errors), initial verbosity is 1 (providing only
+program errors).
+.TP
+\fB\-p\fR, \fB\-\-pes\fR \fIfile\fR
+Open a PES input \fIfile\fR,
+output the contained stream.
+.TP
+\fB\-p\fR, \fB\-\-pes\fR \fIfile\fR \fItarget_stream_id\fR
+Open a PES input \fIfile\fR,
+output the contained stream
+with \fItarget_stream_id\fR (recommended range 0xBD..0xFE).
+The \fIfile\fR may be specified as \fB=\fR to denote
+the last previously mentioned file.
+.TP
+\fB\-P\fR, \fB\-\-ps\fR \fIfile\fR
+Open a PS input \fIfile\fR,
+output the contained program.
+.TP
+\fB\-P\fR, \fB\-\-ps\fR \fIfile\fR \fIsource_stream_id\fR [\fItarget_stream_id\fR]
+Open a PS input \fIfile\fR,
+extract the stream with \fIsource_stream_id\fR (range 0x00..0xFF)
+and output that stream
+with \fItarget_stream_id\fR (recommended range 0xBD..0xFE).
+If no \fItarget_stream_id\fR is given, \fIsource_stream_id\fR is used instead.
+The \fIfile\fR may be specified as \fB=\fR to denote
+the last previously mentioned file.
+.TP
+\fB\-T\fR, \fB\-\-ts\fR \fIfile\fR
+Open a TS input \fIfile\fR,
+extract all programs from it and output them.
+.TP
+\fB\-T\fR, \fB\-\-ts\fR \fIfile\fR \fIsource_program\fR
+Open a TS input \fIfile\fR,
+extract the program \fIsource_program\fR (range 0x0001..0xFFFF)
+and output that program.
+The \fIfile\fR may be specified as \fB=\fR to denote
+the last previously mentioned file.
+.TP
+\fB\-T\fR, \fB\-\-ts\fR \fIfile\fR \fIsource_program\fR \fIsource_stream_id\fR [\fItarget_stream_id\fR]
+Open a TS input \fIfile\fR,
+extract the stream with \fIsource_stream_id\fR (range 0x00..0xFF)
+from the program \fIsource_program\fR (range 0x0001..0xFFFF)
+and output that stream as \fItarget_stream_id\fR (recommended range 0xBD..0xFE)
+.
+If no \fItarget_stream_id\fR is given, use \fIsource_stream_id\fR instead.
+The \fIfile\fR may be specified as \fB=\fR to denote
+the last previously mentioned file.
+.TP
+\fB\-T\fR, \fB\-\-ts\fR \fIfile\fR 0 \fIsource_stream_id\fR [\fItarget_stream_id\fR]
+As before, but extract a stream with \fIsource_stream_id\fR (range 0x00..0xFF)
+from a transport stream with broken or missing PAT/PMT information.
+The stream is opened only, if there is \fBnot\fR any entry in the
+tables for that stream.
+Note, that if there is more than one stream with the given
+\fIsource_stream_id\fR,
+only one matching stream will be opened, and
+the choice is not deterministic.
+.TP
+\fB\-c\fR, \fB\-\-close\fR \fIfile\fR
+Close input \fIfile\fR, as if eof is reached.
+In combination with \fB\-\-repeat\fR this causes the next repeatition
+to start immediately.
+Note, that the input data file is cut of as is, i.e. no attempt
+is made to close the file on a clean audio or video frame boundary.
+.TP
+\fB\-a\fR, \fB\-\-append\fR \fIfile1\fR \fIfile2\fR [\fInum\fR]
+Earmark another \fIfile2\fR to be opened as soon as \fIfile1\fR
+comes to its end.
+The appended \fIfile2\fR is foreseen to be repeated \fInum\fR
+times, default is 1 (see \fB\-\-repeat\fR).
+Both files must contain the same type of data,
+as the data of both files is chained without considering clean
+transition of audio or video sequences.
+The \fIfile1\fR may be specified as \fB=\fR to denote
+the last previously mentioned file.
+.TP
+\fB\-f\fR, \fB\-\-file\fR \fIreference_number\fR \fIfile_name\fR
+The positive \fIreference_number\fR is associated with a \fIfile_name\fR.
+For all following commands, the \fIreference_number\fR may be
+used instead of the \fIfile_name\fR. This allows better control
+over file handles, as the same file may be addressed via different
+\fIreference_number\fRs.
+.TP
+\fB\-x\fR, \fB\-\-crop\fR [\fItarget_stream_id\fR]
+Delete a stream given by \fItarget_stream_id\fR,
+or the complete program
+from the output.
+The corresponding input file(s) will be closed, if not needed otherwise.
+.TP
+\fB\-r\fR, \fB\-\-repeat\fR \fIfile\fR \fInum\fR
+Set the repeatition counter for \fIfile\fR to \fInum\fR
+(or to infinite if \fInum\fR=0).
+The file will be reset as soon as eof is reached
+(or it is closed by the command \fB\-\-close\fR).
+Note, that the file will be reset without considering clean transition
+of audio or video sequences at the restart point.
+The \fIfile\fR may be specified as \fB=\fR to denote
+the last previously mentioned file.
+.TP
+\fB\-R\fR, \fB\-\-reopen\fR
+This command shall precede one of the commands that open a new file
+(i.e. \fB\-\-pes\fR, \fB\-\-ps\fR or \fB\-\-ts\fR must follow
+\fIon the same line\fR).
+The next file will be opened with a new file handle,
+regardless of whether the same file is yet open or not.
+.TP
+\fB\-\-descr\fR [\fIdescr_tag\fR [\fIdescr_length\fR \fIdata\fR...]]
+Add, inhibit or delete in the PMT section a descriptor,
+that does \fBnot\fR belong to a specific stream.
+To add a descriptor, all parameters must be given,
+\fIdescr_tag\fR (range 0x00..0xFF),
+\fIdescr_length\fR (range 1..255),
+and the appropriate amount of bytes given as \fIdata\fR (range 0x00..0xFF).
+To inhibit any descriptor with a given \fIdescr_tag\fR,
+\fIdescr_length\fR is set to \fB0\fR and no \fIdata\fR is given.
+This causes matching descriptors from input streams to
+be discarded instead of being copied to the target stream.
+To delete the manual setting of a descriptor,
+\fIdescr_length\fR is omitted. This causes descriptors
+with matching \fIdescr_tag\fR to be passed from input to
+the target stream.
+To delete all manual settings,
+that do \fBnot\fR belong to a specific stream,
+the \fIdescr_tag\fR is omitted, too.
+Note, that \fB\-\-descr\fR never modifies descriptors,
+that belong to a specific stream.
+To modify these, use the command \fB\-\-sdescr\fR.
+.TP
+\fB\-\-sdescr\fR [\fIstream_id\fR [\fIdescr_tag\fR [\fIdescr_length\fR \fIdata\fR...]]]
+Add, inhibit or delete in the PMT section a descriptor,
+that does belong to a specific stream.
+To add a descriptor, all parameters must be given,
+\fIstream_id\fR (recommended range 0xBD..0xFE),
+\fIdescr_tag\fR (range 0x00..0xFF),
+\fIdescr_length\fR (range 1..255),
+and the appropriate amount of bytes given as \fIdata\fR (range 0x00..0xFF).
+To inhibit any descriptor with a given \fIdescr_tag\fR,
+\fIdescr_length\fR is set to \fB0\fR and no \fIdata\fR is given.
+This causes matching descriptors from the corresponding input streams to
+be discarded instead of being copied to the target stream.
+To delete the manual setting of a descriptor,
+\fIdescr_length\fR is omitted. This causes descriptors
+with matching \fIdescr_tag\fR to be passed from input to
+the target stream.
+To delete all manual settings for a \fIstream_id\fR,
+the \fIdescr_tag\fR is omitted, too.
+To delete all manual settings for all streams \fBand\fR those
+that do not belong to a specific stream,
+the \fIstream_id\fR is omitted, too.
+.TP
+\fB\-B\fR, \fB\-\-busy\fR [\fInum\fR]
+Set the busy flag to \fInum\fR (range 0..1, default is 1).
+Whenever the program has no more data to handle and
+the busy flag is not set, it stops.
+.TP
+\fB\-\-timed\fR
+Force delay timing, even if solely disk files are in use.
+If not so, if delay is to be awaited while processing regular files,
+the delay is skipped instead and timing information in the resulting
+file is adjusted accordingly.
+.TP
+\fB\-F\fR, \fB\-\-fpsi\fR \fItime\fR
+Set the PSI table frequency to \fItime\fR msec
+(or to infinite if \fItime\fR=0, initial value is infinite).
+The PAT and PMT will be generated at more or less the given
+frequency, even if the tables did not change.
+In any case, the next tables will be generated immediately.
+.TP
+\fB\-\-trigin\fR \fItime\fR
+Set the input buffer trigger timing to \fItime\fR.
+For any input stream, that is newly opened
+(or has to be retriggered, e.g. due to intermediate emptiness),
+the buffer is triggered for promotion to the splice unit
+with a delay of \fItime\fR msec compared to the time
+of data entrance into the buffer.
+For any stream yet triggered the timing is not changed
+unless retriggering takes place.
+Not affected by this value are the other trigger conditions,
+mainly a certain buffer fullness
+and cotriggering with a corresponding stream that is triggered.
+.TP
+\fB\-\-trigout\fR \fItime\fR
+Set the output buffer trigger timing to \fItime\fR.
+As the output buffer is triggered for promotion to \fIstdout\fR,
+this is done with a delay of \fItime\fR msec compared to the time
+of data entrance into the buffer.
+The new timing is only valid if set before the first triggering
+of the output buffer,
+or if retriggering takes place, e.g. due to intermediate emptiness.
+Not affected by this value is the trigger condition
+of a certain buffer fullness.
+.TP
+\fB\-C\fR, \fB\-\-config\fR \fInum\fR
+Order output configuration of target stream with \fInum\fR=1,
+switch off with \fInum\fR=0.
+Set \fInum\fR=2, to get information about descriptors, too.
+When switched on, the configuration is printed each time it changes.
+First, the number of programs is printed,
+then for each program one line of description and
+for each stream within that program another line is printed.
+When \fInum\fR=2, then for each descriptor there is printed one more line.
+The following values are compiled:
+.RS
+.TP
+\fIprogs\fR
+Number of programs in target stream.
+.TP
+\fIprog\fR
+Program number within target stream.
+.TP
+\fIpmt\fR
+PMT PID for the program.
+.TP
+\fIpcr\fR
+PCR PID for the program.
+.TP
+\fIstreams\fR
+Number of streams in the program.
+.TP
+\fIstream\fR
+Stream PID.
+.TP
+\fItype\fR
+Stream type (according to ISO 13818-1 table 2-29).
+.TP
+\fIsid\fR
+PES stream ID.
+.TP
+\fIfile\fR
+Source file contents type (PES=0, PS=1, TS=2).
+.TP
+\fIsource\fR
+Stream index in source file (SID for PS, PID for TS).
+.TP
+\fInum\fR
+Source file reference number (-1 if none).
+.TP
+\fIname\fR
+Source file name.
+.TP
+\fIdescr\fR
+Descriptor tag.
+.TP
+\fIlen\fR
+Descriptor length, number of data bytes in the descriptor.
+.TP
+\fIdata\fR
+Descriptor data, bytewise.
+.RE
+.TP
+\fB\-S\fR, \fB\-\-statistics\fR \fItime\fR
+Order output load statistics to be generated about every
+\fItime\fR msec.
+Switch off with \fItime\fR=0.
+The statistics are written to \fIstderr\fR linewise,
+the following values are calculated:
+.RS
+.TP
+\fInow\fR
+Internal clock in msec.
+.TP
+\fIout\fR
+Number of bytes written to stdout since last statistics,
+and number of write operations needed.
+.TP
+\fIbuf\fR
+Number of bytes in the output buffers (lower and upper bound).
+.TP
+\fItime\fR
+Time in msec, for how long the contents of the
+output buffers should suffice (lower and upper bound).
+.TP
+\fIburst\fR
+Size of write burst, i.e. number of bytes prepared to
+be written in a single write operation (lower and upper bound).
+.RE
+.TP
+\fB\-\-badtiming\fR
+In conjunction with a program stream originating from a DVB-s
+digital TV receiver card, You might want to automatically
+correct broken PCR values produced by that card, to
+avoid discontinuities in the output.
+.SH OVERVIEW
+The multiplexer is designed to run uninterrupted and
+be controlled via \fIstdin\fR and \fIstderr\fR.
+It is designed to process data in real time,
+i.e. if the processing is not performed fast
+enough (e.g. because of low system performance),
+errors in the resulting data may occur, namely
+concerning the timing.
+The multiplexer may be invoked interactively with
+the streams to process given as command line options
+or with the commands to be processed typed into
+\fIstdin\fR during operation.
+The latter type of usage is also designed for use
+with an user interface front-end, that may
+translate some GUI input to iso13818ps commands
+and filter its responses to be presented to the user
+as appropriate.
+.P
+Three different types of input are supported:
+Paketized elementary streams (PES),
+Program streams (PS),
+Transport streams (TS).
+.P
+Numeric parameters may be given in decimal (e.g. 31)
+or in hex (e.g. 0x1F).
+.SH DETAILS
+The output file or device does not change throughout the
+time the program runs. The input files, however, may vary.
+Also the contents of an input file may vary, but not its
+type. E.g., a file opened as program stream must contain
+valid program stream data up to its end (and including
+any files that are appended to this file with \fB\-\-append\fR).
+.P
+All basic PSI is evaluated contiguously, and changes in
+the configuration (changing PID, etc.) are taken into
+account and tracked. Thus a stream should not get lost
+simply because its PID is changed in the middle of the
+broadcast.
+.SH EXAMPLES
+To convert a program stream file x.PS to a program stream file y.PS,
+and System Header and Stream Map generated about every half second:
+.IP
+$ iso13818ps --fpsi 500 --ps x.PS > y.PS
+.PP
+If the program stream doesn't contain correct PSI,
+the single streams may be extracted one by one. Assuming
+one video stream (0xE0) and mono audio (0xC0):
+.IP
+$ iso13818ps --fpsi 500 --ps x.PS 0xE0 --ps = 0xC0 > y.PS
+.PP
+To bundle two streams originating from video devices and
+send them out to a video output device, e.g.:
+.IP
+$ iso13818ps -F 500 -P /dev/video0 -P /dev/video1 > /dev/video2
+.PP
+.PP
+To invoke the multiplexer for interactive use, it must
+be put in all-time-busy-mode. Subsequently, commands can
+be fed to \fIstdin\fR, e.g. to do the same as with the
+first example:
+.IP
+$ iso13818ps --busy > y.PS
+.br
+fpsi 500
+.br
+ps x.PS
+.PP
+This instance of the multiplexer will not cease when the
+end of file in x.PS is reached. To stop the multiplexer,
+either \fBquit\fR or \fBbusy 0\fR may be typed to \fIstdin\fR.
+.P
+To output a movie repeatedly (e.g. seven times):
+.IP
+$ iso13818ps -F 500 --ps thepurpleroseofcairo.PS --repeat = 7 > /dev/video2
+.PP
+Note, that if during the movie is processed, the command
+.IP
+close thepurpleroseofcairo.PS
+.PP
+is issued, and supposed it is not yet processed the seventh time,
+it is not closed, but restarted immediately.
+.P
+To concatenate two movies and output them in sequence:
+.IP
+$ iso13818ps -F 500 --ps rambo1.PS --append = rambo2.PS > /dev/video2
+.PP
+Note, that a file can only be appended to a file, that is
+yet in use (i.e. being processed). Thus, it is not possible
+to append a third movie (rambo3.PS) from within the command
+line. Instead, the processing of the second movie must be
+awaited, and then the following command can be fed to \fIstdin\fR:
+.IP
+append rambo2.PS rambo3.PS
+.PP
+If the source is a transport stream with broken or
+missing PSI (i.e. PAT/PMT), and if further it can
+be assumed, that there is only one program to be found
+in the stream, then the \fIsource program number\fR
+can be specified as \fB0\fR. With the following
+example, one video and one audio stream are extracted
+(the first one found, if more than one exist):
+.IP
+$ iso13818ps -F 500 -T deficient.TS 0 0xE0 -T = 0 0xC0 > complete.PS
+.PP
+.SH "KNOWN PROBLEMS"
+The program might not work in conjunction with device drivers
+that do not deliver or accept data unless a first read or write
+is done on the device. E.g., for a MPEG video data source, that
+does not produce output without being triggered by being read
+from, this program will await the readability of the first
+data infinitely. On the other hand it is obvious that the driver
+should not encode data as long as there is no application that
+will read this data.
+One possible solution to this dilemma is to patch such a driver
+to interpret the \fIpoll\fR command as an order for data, thus
+triggering the read mechanisms. Analogous considerations hold
+for polling the output device and writing to it.
+.P
+Paketized elementary streams do not necessarily contain
+usable time stamps, so when multiplexing raw PES, streams
+belonging together may be out of sync. This is especially
+noteworthy in case streams shall be demultiplexed and then
+again multiplexed in some way. Results will always be better
+when this remultiplexing takes place entirely within the
+multiplexer, because that way timing information won't get lost.
+.SH BUGS
+End of action sometimes is not detected correctly, which
+causes the multiplexer to hang.
+Nevertheless, it then can be stopped by the \fBquit\fR command.
+.P
+Changing configuration is not printed if the change
+is solely a descriptor coming from a source file.
+.SH "SEE ALSO"
+.BR iso13818ts (1),
+.BR ISO\ 13818-1 ,
+.BR ETSI\ EN\ 300\ 468 .
+.SH AUTHOR
+Oskar Schirmer (schirmer@scara.com).
+.br
+Thanks a lot for specific bug fixes and testing to:
+Miriam Busch.

@@ -1,0 +1,242 @@
+ENDEF_BEGIN(network_name,0x40)
+  ENDEF_STRING(network_name)
+ENDEF_END
+ENDEF_BEGIN(service_list,0x41)
+  ENDEF_LOOP
+    ENDEF_NUMBER0(service_id)
+    ENDEF_NUMBER1(service_type)
+  ENDEF_LOOPEND0
+ENDEF_END
+ENDEF_BEGIN(satellite_delivery_system,0x43)
+  ENDEF_NUMBER0(frequency)
+  ENDEF_NUMBER0(orbital_position)
+  ENDEF_NUMBER0(west_east_flag)
+  ENDEF_NUMBER0(polarization)
+  ENDEF_NUMBER0(modulation)
+  ENDEF_NUMBER0(symbol_rate)
+  ENDEF_NUMBER1(fec_inner)
+ENDEF_END
+ENDEF_BEGIN(cable_delivery_system,0x44)
+  ENDEF_NUMBER0(frequency)
+  ENDEF_NUMBER0(fec_outer)
+  ENDEF_NUMBER0(modulation)
+  ENDEF_NUMBER0(symbol_rate)
+  ENDEF_NUMBER1(fec_inner)
+ENDEF_END
+ENDEF_BEGIN(bouquet_name,0x47)
+  ENDEF_STRING(bouquet_name)
+ENDEF_END
+ENDEF_BEGIN(service,0x48)
+  ENDEF_NUMBER1(service_type)
+  ENDEF_STRING(service_provider_name)
+  ENDEF_STRING(service_name)
+ENDEF_END
+ENDEF_BEGIN(country_availability,0x49)
+  ENDEF_NUMBER1(country_availability_flag)
+  ENDEF_LOOP
+    ENDEF_STRING3(country_code)
+  ENDEF_LOOPEND0
+ENDEF_END
+ENDEF_BEGIN(linkage,0x4A)
+  ENDEF_NUMBER0(transport_stream_id)
+  ENDEF_NUMBER0(original_network_id)
+  ENDEF_NUMBER0(service_id)
+  ENDEF_NUMBER0(linkage_type)
+  ENDEF_NUMBER0(hand_over_type)
+  ENDEF_NUMBER0(origin_type)
+  ENDEF_NUMBER0(network_id)
+  ENDEF_NUMBER1(initial_service_id)
+  ENDEF_LOOP
+    ENDEF_NUMBER1(private_data_byte)
+  ENDEF_LOOPEND0
+ENDEF_END
+ENDEF_BEGIN(nvod_reference,0x4B)
+  ENDEF_LOOP
+    ENDEF_NUMBER0(transport_stream_id)
+    ENDEF_NUMBER0(original_network_id)
+    ENDEF_NUMBER1(service_id)
+  ENDEF_LOOPEND0
+ENDEF_END
+ENDEF_BEGIN(time_shifted_service,0x4C)
+  ENDEF_NUMBER1(reference_service_id)
+ENDEF_END
+ENDEF_BEGIN(short_event,0x4D)
+  ENDEF_STRING3(ISO_639_2_3_language_code)
+  ENDEF_STRING(event_name)
+  ENDEF_STRING(text)
+ENDEF_END
+ENDEF_BEGIN(extended_event,0x4E)
+  ENDEF_STRING3(ISO_639_2_3_language_code)
+  ENDEF_LOOP
+    ENDEF_STRING(item_description)
+    ENDEF_STRING(item)
+  ENDEF_LOOPEND1
+  ENDEF_STRING(text)
+ENDEF_END
+ENDEF_BEGIN(time_shifted_event,0x4F)
+  ENDEF_NUMBER0(reference_service_id)
+  ENDEF_NUMBER1(reference_event_id)
+ENDEF_END
+ENDEF_BEGIN(component,0x50)
+  ENDEF_NUMBER0(stream_content)
+  ENDEF_NUMBER0(component_type)
+  ENDEF_NUMBER1(component_tag)
+  ENDEF_STRING3(ISO_639_2_3_language_code)
+  ENDEF_STRING(text)
+ENDEF_END
+ENDEF_BEGIN(mosaic,0x51)
+  ENDEF_NUMBER0(mosaic_entry_point)
+  ENDEF_NUMBER0(number_of_horizontal_elementary_cells)
+  ENDEF_NUMBER1(number_of_vertical_elementary_cells)
+  ENDEF_LOOP
+    ENDEF_NUMBER0(logical_cell_id)
+    ENDEF_NUMBER1(logical_cell_presentation_info)
+    ENDEF_LOOP
+      ENDEF_NUMBER1(elementary_cell_id)
+    ENDEF_LOOPEND1
+    ENDEF_NUMBER0(cell_linkage_info)
+    ENDEF_NUMBER0(bouquet_id)
+    ENDEF_NUMBER0(original_network_id)
+    ENDEF_NUMBER0(transport_stream_id)
+    ENDEF_NUMBER0(service_id)
+    ENDEF_NUMBER1(event_id)
+  ENDEF_LOOPEND0
+ENDEF_END
+ENDEF_BEGIN(ca_identifier,0x53)
+  ENDEF_LOOP
+    ENDEF_NUMBER1(ca_system_id)
+  ENDEF_LOOPEND0
+ENDEF_END
+ENDEF_BEGIN(content,0x54)
+  ENDEF_LOOP
+    ENDEF_NUMBER0(content_nibbles)
+    ENDEF_NUMBER1(user_nibbles)
+  ENDEF_LOOPEND0
+ENDEF_END
+ENDEF_BEGIN(parental_rating,0x55)
+  ENDEF_STRING3(country_code)
+  ENDEF_NUMBER1(rating)
+ENDEF_END
+ENDEF_BEGIN(telephone,0x57)
+  ENDEF_NUMBER0(foreign_availability)
+  ENDEF_NUMBER1(connection_type)
+  ENDEF_STRING(country_prefix)
+  ENDEF_STRING(international_area_code)
+  ENDEF_STRING(operator_code)
+  ENDEF_STRING(national_area_code)
+  ENDEF_STRING(core_number)
+ENDEF_END
+ENDEF_BEGIN(local_time_offset,0x58)
+  ENDEF_LOOP
+    ENDEF_STRING3(country_code)
+    ENDEF_NUMBER0(country_region)
+    ENDEF_NUMBER0(local_time_offset_polarity)
+    ENDEF_NUMBER1(local_time_offset)
+    ENDEF_DATETIME
+    ENDEF_NUMBER1(next_time_offset)
+  ENDEF_LOOPEND0
+ENDEF_END
+ENDEF_BEGIN(terrestrial_delivery_system,0x5A)
+  ENDEF_NUMBER0(centre_frequency)
+  ENDEF_NUMBER0(bandwidth)
+  ENDEF_NUMBER0(constellation)
+  ENDEF_NUMBER0(hierarchy_information)
+  ENDEF_NUMBER0(code_rate_hp_stream)
+  ENDEF_NUMBER0(code_rate_lp_stream)
+  ENDEF_NUMBER0(guard_interval)
+  ENDEF_NUMBER0(transmission_mode)
+  ENDEF_NUMBER1(other_frequency_flag)
+ENDEF_END
+ENDEF_BEGIN(multilingual_network_name,0x5B)
+  ENDEF_LOOP
+    ENDEF_STRING3(ISO_639_2_3_language_code)
+    ENDEF_STRING(network_name)
+  ENDEF_LOOPEND0
+ENDEF_END
+ENDEF_BEGIN(multilingual_bouquet_name,0x5C)
+  ENDEF_LOOP
+    ENDEF_STRING3(ISO_639_2_3_language_code)
+    ENDEF_STRING(bouquet_name)
+  ENDEF_LOOPEND0
+ENDEF_END
+ENDEF_BEGIN(multilingual_service_name,0x5D)
+  ENDEF_LOOP
+    ENDEF_STRING3(ISO_639_2_3_language_code)
+    ENDEF_STRING(service_provider_name)
+    ENDEF_STRING(service_name)
+  ENDEF_LOOPEND0
+ENDEF_END
+ENDEF_BEGIN(multilingual_component,0x5E)
+  ENDEF_NUMBER1(component_tag)
+  ENDEF_LOOP
+    ENDEF_STRING3(ISO_639_2_3_language_code)
+    ENDEF_STRING(text)
+  ENDEF_LOOPEND0
+ENDEF_END
+ENDEF_BEGIN(private_data_specifier,0x5F)
+  ENDEF_NUMBER1(private_data_specifier)
+ENDEF_END
+ENDEF_BEGIN(short_smoothing_buffer,0x61)
+  ENDEF_NUMBER0(sb_size)
+  ENDEF_NUMBER1(sb_leak_rate)
+ENDEF_END
+ENDEF_BEGIN(frequency_list,0x62)
+  ENDEF_NUMBER1(coding_type)
+  ENDEF_LOOP
+    ENDEF_NUMBER1(centre_frequency)
+  ENDEF_LOOPEND0
+ENDEF_END
+ENDEF_BEGIN(partial_transport_stream,0x63)
+  ENDEF_NUMBER0(peak_rate)
+  ENDEF_NUMBER0(minimum_overall_smoothing_rate)
+  ENDEF_NUMBER1(maximum_overall_smoothing_buffer)
+ENDEF_END
+ENDEF_BEGIN(data_broadcast,0x64)
+  ENDEF_NUMBER0(data_broadcast_id)
+  ENDEF_NUMBER1(component_tag)
+  ENDEF_LOOP
+    ENDEF_NUMBER1(selector_byte)
+  ENDEF_LOOPEND1
+  ENDEF_STRING3(ISO_639_2_3_language_code)
+  ENDEF_STRING(text)
+ENDEF_END
+ENDEF_BEGIN(pdc,0x69)
+  ENDEF_NUMBER1(program_identification_label)
+ENDEF_END
+ENDEF_BEGIN(cell_list,0x6C)
+  ENDEF_LOOP
+    ENDEF_NUMBER0(cell_id)
+    ENDEF_NUMBER0(cell_latitude)
+    ENDEF_NUMBER0(cell_longitude)
+    ENDEF_NUMBER0(cell_extend_of_latitude)
+    ENDEF_NUMBER1(cell_extend_of_longitude)
+    ENDEF_LOOP
+      ENDEF_NUMBER0(cell_id_extension)
+      ENDEF_NUMBER0(subcell_latitude)
+      ENDEF_NUMBER0(subcell_longitude)
+      ENDEF_NUMBER0(subcell_extend_of_latitude)
+      ENDEF_NUMBER1(subcell_extend_of_longitude)
+    ENDEF_LOOPEND0
+  ENDEF_LOOPEND0
+ENDEF_END
+ENDEF_BEGIN(cell_frequency_link,0x6D)
+  ENDEF_LOOP
+    ENDEF_NUMBER0(cell_id)
+    ENDEF_NUMBER1(frequency)
+    ENDEF_LOOP
+      ENDEF_NUMBER0(cell_id_extension)
+      ENDEF_NUMBER1(transposer_frequency)
+    ENDEF_LOOPEND0
+  ENDEF_LOOPEND0
+ENDEF_END
+ENDEF_BEGIN(announcement_support,0x6E)
+  ENDEF_NUMBER1(announcement_support_indicator)
+  ENDEF_LOOP
+    ENDEF_NUMBER0(announcement_type)
+    ENDEF_NUMBER0(reference_type)
+    ENDEF_NUMBER0(original_network_id)
+    ENDEF_NUMBER0(transport_stream_id)
+    ENDEF_NUMBER0(service_id)
+    ENDEF_NUMBER1(component_tag)
+  ENDEF_LOOPEND0
+ENDEF_END
